@@ -1,0 +1,15 @@
+{
+  "name": "mgsn",
+  "local_port": 51009,
+  "entrypoint": "bun run dev",
+  "publish": {
+    "label": "mgsn",
+    "type": "http",
+    "entrypoint": "bun run prod",
+    "published_port": 51158,
+    "env": {
+      "NODE_ENV": "production",
+      "ZO_CLIENT_IDENTITY_TOKEN": "none"
+    }
+  }
+}
