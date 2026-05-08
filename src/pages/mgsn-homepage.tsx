@@ -119,7 +119,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;letter-spacing:-.01em}
 .wa-qr-title{font-size:28px;margin-bottom:12px}
 .wa-qr-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#25D366;margin-bottom:8px}
 .wa-qr-location{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:16px;line-height:1.5}
-.wa-qr-img{width:120px;height:120px;border-radius:8px;display:block;margin:0 auto;border:2px solid rgba(37,211,102,.3)}
+.wa-qr-img{width:120px;height:120px;border-radius:8px;display:block;margin:0 auto;border:2px solid rgba(37,211,102,.3);object-fit:cover}
 .wa-qr-caption{font-size:11px;color:rgba(255,255,255,.35);margin-top:10px}
 
 /* FOOTER */
