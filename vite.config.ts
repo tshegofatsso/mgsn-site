@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: '/mgsn-site/',
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

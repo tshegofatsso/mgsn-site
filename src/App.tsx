@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import MGSNHomepage from "./pages/mgsn-homepage";
 import VolunteerRegistration from "./pages/volunteer-registration";
 import CampaignApp from "./pages/campaign";
@@ -7,7 +7,7 @@ import MeetingDashboard from "./pages/meeting";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<MGSNHomepage />} />
         <Route path="/volunteer" element={<VolunteerRegistration />} />
@@ -15,6 +15,6 @@ export default function App() {
         <Route path="/governance" element={<GovernanceDashboard />} />
         <Route path="/meeting" element={<MeetingDashboard />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
