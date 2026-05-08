@@ -21,7 +21,8 @@ h1,h2,h3{font-family:'Playfair Display',serif;letter-spacing:-.01em}
 /* NAV */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(15,26,15,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,165,53,.12)}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nl-leaf{width:36px;height:36px;background:#D4A535;border-radius:50% 0 50% 0;display:flex;align-items:center;justify-content:center;font-size:18px}
+.nl-leaf{width:36px;height:36px;border-radius:50% 0 50% 0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:transparent}
+.nl-leaf img{width:100%;height:100%;object-fit:contain}
 .nl-name{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#D4A535;text-transform:uppercase;line-height:1}
 .nl-reg{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:2px}
 .nav-links{display:flex;gap:28px;align-items:center}
@@ -31,21 +32,17 @@ h1,h2,h3{font-family:'Playfair Display',serif;letter-spacing:-.01em}
 .nl-cta:hover{background:#a84e22}
 
 /* HERO */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:120px 32px 80px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#0f1a0f 0%,#1a2e1a 50%,#0f1a0f 100%)}
-.hero-texture{position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.hero-accent{position:absolute;top:-200px;right:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(212,165,53,.08) 0%,transparent 70%);border-radius:50%}
-.hero-content{position:relative;max-width:900px;margin:0 auto;width:100%;text-align:center}
-.hero-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#D4A535;margin-bottom:20px}
-.hero-title{font-size:clamp(40px,7vw,76px);font-weight:900;line-height:.93;letter-spacing:-2px;color:#fff;margin-bottom:24px}
-.hero-title span{display:block;color:#D4A535}
-.hero-lead{font-size:17px;color:rgba(255,255,255,.72);line-height:1.7;max-width:620px;margin:0 auto 36px;font-weight:400}
-.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.btn-primary{display:inline-flex;align-items:center;gap:8px;background:#C4622D;color:#fff;padding:14px 28px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:all .2s}
-.btn-primary:hover{background:#a84e22;transform:translateY(-1px)}
-.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:rgba(255,255,255,.85);padding:14px 28px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1.5px solid rgba(255,255,255,.25);cursor:pointer;transition:all .2s}
-.btn-secondary:hover{border-color:#D4A535;color:#D4A535}
-.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.3);font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(26,58,26,.7) 0%,rgba(15,26,15,0) 70%)}
+.hero-eyebrow{margin-bottom:16px;color:#D4A535}
+.hero-title{font-size:clamp(2.4rem,6vw,5rem);font-weight:900;color:#fff;max-width:820px;margin-bottom:24px;line-height:1.08}
+.hero-lead{font-size:clamp(1rem,2.5vw,1.2rem);color:rgba(255,255,255,.65);max-width:580px;margin-bottom:40px;line-height:1.7}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn-primary{background:#C4622D;color:#fff;padding:14px 32px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:background .2s,transform .2s}
+.btn-primary:hover{background:#b55626;transform:translateY(-2px)}
+.btn-secondary{background:transparent;border:1.5px solid rgba(212,165,53,.4);color:#D4A535;padding:14px 32px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:all .2s}
+.btn-secondary:hover{border-color:#D4A535;background:rgba(212,165,53,.06)}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.25);font-size:11px;letter-spacing:2px;text-transform:uppercase}
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(212,165,53,.5),transparent)}
 
 /* SECTION COMMON */
@@ -117,11 +114,21 @@ h1,h2,h3{font-family:'Playfair Display',serif;letter-spacing:-.01em}
 .form-submit{width:100%;background:#C4622D;color:#fff;padding:13px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:background .2s}
 .form-submit:hover{background:#a84e22}
 
+/* WhatsApp QR Section */
+.wa-qr-section{margin-top:32px;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.2);border-radius:14px;padding:24px;text-align:center}
+.wa-qr-title{font-size:28px;margin-bottom:12px}
+.wa-qr-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#25D366;margin-bottom:8px}
+.wa-qr-location{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:16px;line-height:1.5}
+.wa-qr-img{width:120px;height:120px;border-radius:8px;display:block;margin:0 auto;border:2px solid rgba(37,211,102,.3)}
+.wa-qr-caption{font-size:11px;color:rgba(255,255,255,.35);margin-top:10px}
+
 /* FOOTER */
 .footer{background:#0a120a;padding:64px 32px 32px;border-top:1px solid rgba(255,255,255,.06)}
 .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
 .footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.footer-tagline{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6;max-width:280px}
+.footer-logo{width:36px;height:36px;border-radius:8px;overflow:hidden}
+.footer-logo img{width:100%;height:100%;object-fit:contain}
+.footer-tagline{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6;max-width:280px;margin-top:16px}
 .footer-col-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#D4A535;margin-bottom:16px}
 .footer-links{list-style:none;display:grid;gap:10px}
 .footer-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s}
@@ -218,7 +225,9 @@ export default function MGSNHomepage() {
         {/* NAV */}
         <nav className="nav">
           <a href="#" className="nav-logo">
-            <div className="nl-leaf">🌿</div>
+            <div className="nl-leaf">
+              <img src="/assets/mgsn-logo-dark.png" alt="MGSN" />
+            </div>
             <div>
               <div className="nl-name">MGSN</div>
               <div className="nl-reg">Mabopane Green Space Network</div>
@@ -235,23 +244,18 @@ export default function MGSNHomepage() {
 
         {/* HERO */}
         <section className="hero">
-          <div className="hero-bg" />
-          <div className="hero-texture" />
-          <div className="hero-accent" />
-          <div className="hero-content">
-            <div className="hero-eyebrow">🌿 Mabopane Green Space Network · NPC 2025/422818/08</div>
-            <h1 className="hero-title">
-              Cultivating Green Futures,<br />
-              <span>Empowering Communities</span>
-            </h1>
-            <p className="hero-lead">
-              Transforming Mabopane's Landscapes, One Green Space at a Time.
-              Join us in building a sustainable and vibrant future for all.
-            </p>
-            <div className="hero-ctas">
-              <a href="#impact" className="btn-primary">See Our Impact</a>
-              <a href="#membership" className="btn-secondary">Join Us Today</a>
-            </div>
+          <div className="hero-eyebrow">🌿 Mabopane Green Space Network · NPC 2025/422818/08</div>
+          <h1 className="hero-title">
+            Cultivating Green Futures,<br />
+            <span>Empowering Communities</span>
+          </h1>
+          <p className="hero-lead">
+            Transforming Mabopane's Landscapes, One Green Space at a Time.
+            Join us in building a sustainable and vibrant future for all.
+          </p>
+          <div className="hero-ctas">
+            <a href="#impact" className="btn-primary">See Our Impact</a>
+            <a href="#membership" className="btn-secondary">Join Us Today</a>
           </div>
           <div className="hero-scroll">
             <div className="scroll-line" />
@@ -377,6 +381,15 @@ export default function MGSNHomepage() {
                   </li>
                 ))}
               </ul>
+
+              {/* WhatsApp QR Section */}
+              <div className="wa-qr-section">
+                <div className="wa-qr-title">💬</div>
+                <div className="wa-qr-label">Join Our Volunteer WhatsApp Group</div>
+                <div className="wa-qr-location">Mabopane Block M · Waterfall Park</div>
+                <img src="/assets/whatsapp-qr.png" alt="WhatsApp QR Code" className="wa-qr-img" />
+                <div className="wa-qr-caption">Scan to join the volunteer group</div>
+              </div>
             </div>
             <div className="mems-form">
               {submitted ? (
@@ -458,7 +471,9 @@ export default function MGSNHomepage() {
           <div className="footer-inner">
             <div>
               <div className="footer-brand">
-                <div className="nl-leaf">🌿</div>
+                <div className="footer-logo">
+                  <img src="/assets/mgsn-logo-light.png" alt="MGSN" />
+                </div>
                 <div>
                   <div className="nl-name">MGSN</div>
                   <div className="nl-reg">Mabopane Green Space Network</div>
