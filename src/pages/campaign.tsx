@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const stars: [number,number][] = [[30,40],[260,55],[20,120],[270,90],[50,180],[255,170]];
+
 const G = "#1A3A1A";
 const TC = "#C4622D";
 const OC = "#D4A535";
@@ -206,7 +208,7 @@ function PoleDiagram() {
       <rect x="0" y="440" width="300" height="100" fill="url(#ground2)" rx="0"/>
       <rect x="0" y="438" width="300" height="5" fill="#4A3020"/>
       <text x="150" y="20" fill="rgba(255,255,255,.4)" fontSize="8.5" fontFamily="Barlow Condensed, sans-serif" textAnchor="middle" letterSpacing="2">12m TIMBER POLE — BLOCK M WATERFALL PARK</text>
-      {[30,40],[260,55],[20,120],[270,90],[50,180],[255,170]].map(([x,y],i) => <circle key={i} cx={x} cy={y} r="1.2" fill="rgba(255,255,255,.4)"/>)}
+      {stars.map(([x,y],i) => <circle key={i} cx={x} cy={y} r={1.2} fill="rgba(255,255,255,.4)"/>)}
       <rect x="139" y="440" width="22" height="70" fill="#6B4423" opacity=".7"/>
       <ellipse cx="150" cy="442" rx="34" ry="7" fill="#888" opacity=".8"/>
       <rect x="141" y="65" width="18" height="378" fill="#7B5230"/>
