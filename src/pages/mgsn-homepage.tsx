@@ -1,520 +1,246 @@
 import { useState } from "react";
 
-const G = "#1A3A1A";
-const TC = "#C4622D";
-const OC = "#D4A535";
-const CR = "#F7EED8";
-const EA = "#2A1810";
-const SG = "#5A8A5A";
-const LG = "#E8F0E8";
+const LIGHT = {
+  bg: "#F5F0E8", surface: "#ffffff", surface2: "#EDE7D9",
+  text: "#1A3D4A", muted: "rgba(26,61,74,0.6)", dim: "rgba(26,61,74,0.45)",
+  border: "rgba(26,61,74,0.08)", headerBg: "#072C2C",
+  cardShadow: "0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06)",
+  navBtn: "rgba(255,255,255,0.05)", navTxt: "rgba(255,255,255,0.65)",
+};
+const DARK = {
+  bg: "#041f1f", surface: "#072C2C", surface2: "#0a3535",
+  text: "#EDB810", muted: "rgba(237,184,16,0.7)", dim: "rgba(237,184,16,0.5)",
+  border: "rgba(237,184,16,0.1)", headerBg: "#020f0f",
+  cardShadow: "0 2px 8px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3)",
+  navBtn: "rgba(237,184,16,0.07)", navTxt: "rgba(237,184,16,0.7)",
+};
 
-const gf = `@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700;800&family=Dancing+Script:wght@700&display=swap');`;
-
-const css = `${gf}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:#0f1a0f;color:#fff;font-family:'Barlow',sans-serif;-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:'Playfair Display',serif;letter-spacing:-.01em}
-.eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:2px;text-transform:uppercase}
-.signature{font-family:'Dancing Script',cursive}
-
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(15,26,15,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,165,53,.12)}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nl-leaf{width:36px;height:36px;border-radius:50% 0 50% 0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:transparent}
-.nl-leaf img{width:100%;height:100%;object-fit:contain}
-.nl-name{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#D4A535;text-transform:uppercase;line-height:1}
-.nl-reg{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:2px}
-.nav-links{display:flex;gap:28px;align-items:center}
-.nl{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.65);text-decoration:none;transition:color .2s}
-.nl:hover{color:#D4A535}
-.nl-cta{background:#C4622D;color:#fff;padding:8px 18px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:background .2s}
-.nl-cta:hover{background:#a84e22}
-
-/* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(26,58,26,.7) 0%,rgba(15,26,15,0) 70%)}
-.hero-eyebrow{margin-bottom:16px;color:#D4A535}
-.hero-title{font-size:clamp(2.4rem,6vw,5rem);font-weight:900;color:#fff;max-width:820px;margin-bottom:24px;line-height:1.08}
-.hero-lead{font-size:clamp(1rem,2.5vw,1.2rem);color:rgba(255,255,255,.65);max-width:580px;margin-bottom:40px;line-height:1.7}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-.btn-primary{background:#C4622D;color:#fff;padding:14px 32px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:background .2s,transform .2s}
-.btn-primary:hover{background:#b55626;transform:translateY(-2px)}
-.btn-secondary{background:transparent;border:1.5px solid rgba(212,165,53,.4);color:#D4A535;padding:14px 32px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:all .2s}
-.btn-secondary:hover{border-color:#D4A535;background:rgba(212,165,53,.06)}
-.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.25);font-size:11px;letter-spacing:2px;text-transform:uppercase}
-.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(212,165,53,.5),transparent)}
-
-/* SECTION COMMON */
-.section{padding:96px 32px;max-width:1200px;margin:0 auto}
-.section-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#D4A535;margin-bottom:12px}
-.section-title{font-size:clamp(28px,4vw,42px);font-weight:700;color:#fff;margin-bottom:16px;line-height:1.1}
-.section-lead{font-size:16px;color:rgba(255,255,255,.6);line-height:1.7;max-width:560px}
-.section-lead a{color:#D4A535;text-decoration:none}
-.section-lead a:hover{text-decoration:underline}
-
-/* ABOUT */
-.about{background:linear-gradient(180deg,#0f1a0f 0%,#152115 100%)}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-top:56px}
-.about-text{font-size:16px;color:rgba(255,255,255,.7);line-height:1.8}
-.about-text p{margin-bottom:20px}
-.about-text strong{color:#fff;font-weight:600}
-.about-visual{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.av-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:24px 20px}
-.av-icon{font-size:28px;margin-bottom:12px}
-.av-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:6px}
-.av-desc{font-size:12px;color:rgba(255,255,255,.55);line-height:1.5}
-
-/* IMPACT */
-.impact{background:#152115;position:relative;overflow:hidden}
-.impact::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,165,53,.05) 0%,transparent 60%)}
-.impact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:56px;position:relative}
-.impact-card{text-align:center;padding:32px 20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;transition:all .3s}
-.impact-card:hover{background:rgba(212,165,53,.06);border-color:rgba(212,165,53,.2);transform:translateY(-4px)}
-.impact-num{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:#D4A535;line-height:1;margin-bottom:8px}
-.impact-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5)}
-.impact-values{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;padding-top:48px;border-top:1px solid rgba(255,255,255,.07)}
-.iv-item{text-align:center}
-.iv-icon{font-size:22px;margin-bottom:8px}
-.iv-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#D4A535;margin-bottom:6px}
-.iv-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.5}
-
-/* PROJECTS */
-.projects{background:linear-gradient(180deg,#152115 0%,#0f1a0f 100%)}
-.projects-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px}
-.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
-.proj-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:18px;overflow:hidden;transition:all .3s;cursor:pointer}
-.proj-card:hover{border-color:rgba(212,165,53,.25);transform:translateY(-3px)}
-.proj-img{height:200px;background:linear-gradient(135deg,#1a3a1a,#2a4a2a);display:flex;align-items:center;justify-content:center;font-size:56px;position:relative;overflow:hidden}
-.proj-img::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.2)}
-.proj-body{padding:24px}
-.proj-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:#fff;margin-bottom:8px}
-.proj-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:16px}
-.proj-tags{display:flex;gap:6px;flex-wrap:wrap}
-.proj-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:100px;background:rgba(212,165,53,.12);color:#D4A535;border:1px solid rgba(212,165,53,.2)}
-
-/* MEMBERSHIP */
-.membership{background:#0f1a0f;position:relative}
-.membership::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,165,53,.3),transparent)}
-.mems-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-top:56px}
-.mems-benefits{list-style:none;display:grid;gap:16px}
-.mb-item{display:flex;gap:14px;align-items:flex-start;font-size:14px;color:rgba(255,255,255,.7)}
-.mb-icon{width:32px;height:32px;background:rgba(212,165,53,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
-.mems-form{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:32px}
-.mems-form-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:20px}
-.form-group{margin-bottom:14px}
-.form-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:6px;display:block}
-.form-input{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:11px 14px;font-size:14px;font-family:'Barlow',sans-serif;color:#fff;outline:none;transition:border-color .2s}
-.form-input:focus{border-color:#D4A535}
-.form-input::placeholder{color:rgba(255,255,255,.25)}
-.form-checkboxes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.form-checkbox{display:flex;align-items:center;gap:6px;cursor:pointer}
-.form-checkbox input{accent-color:#D4A535;width:14px;height:14px}
-.form-checkbox span{font-size:12px;color:rgba(255,255,255,.6)}
-.form-submit{width:100%;background:#C4622D;color:#fff;padding:13px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:background .2s}
-.form-submit:hover{background:#a84e22}
-
-/* WhatsApp QR Section */
-.wa-qr-section{margin-top:32px;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.2);border-radius:14px;padding:24px;text-align:center}
-.wa-qr-title{font-size:28px;margin-bottom:12px}
-.wa-qr-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#25D366;margin-bottom:8px}
-.wa-qr-location{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:16px;line-height:1.5}
-.wa-qr-img{width:120px;height:120px;border-radius:8px;display:block;margin:0 auto;border:2px solid rgba(37,211,102,.3);object-fit:cover}
-.wa-qr-caption{font-size:11px;color:rgba(255,255,255,.35);margin-top:10px}
-
-/* FOOTER */
-.footer{background:#0a120a;padding:64px 32px 32px;border-top:1px solid rgba(255,255,255,.06)}
-.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
-.footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.footer-logo{width:36px;height:36px;border-radius:8px;overflow:hidden}
-.footer-logo img{width:100%;height:100%;object-fit:contain}
-.footer-tagline{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6;max-width:280px;margin-top:16px}
-.footer-col-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#D4A535;margin-bottom:16px}
-.footer-links{list-style:none;display:grid;gap:10px}
-.footer-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s}
-.footer-links a:hover{color:#D4A535}
-.footer-bottom{max-width:1200px;margin:0 auto;padding-top:24px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.footer-copy{font-size:12px;color:rgba(255,255,255,.3)}
-
-/* MOBILE */
-@media(max-width:768px){
-.nav{padding:12px 20px}
-.nav-links{display:none}
-.hero{padding:100px 20px 60px}
-.hero-ctas{flex-direction:column;align-items:center}
-.section{padding:64px 20px}
-.about-grid,.mems-grid{grid-template-columns:1fr;gap:40px}
-.impact-grid{grid-template-columns:repeat(2,1fr)}
-.proj-grid{grid-template-columns:1fr}
-.footer-inner{grid-template-columns:1fr 1fr;gap:32px}
-}
-`;
-
-const impacts = [
-  { num: "50,000+", label: "Trees Planted" },
-  { num: "15+", label: "Parks Revitalized" },
-  { num: "2,000+", label: "Youth Engaged" },
-  { num: "200+", label: "Tons Waste Diverted" },
-];
-
-const projects = [
-  {
-    icon: "🏗️",
-    title: "Timber Shelter Construction Program",
-    desc: "Hands-on construction of timber shelters involving youth capacity building, skills transfer, and community co-design implementation.",
-    tags: ["Youth Empowerment", "Infrastructure"],
-  },
-  {
-    icon: "🤝",
-    title: "Community Co-Design Initiative",
-    desc: "Collaborative design process involving community members in planning and implementing green space transformations.",
-    tags: ["Community", "Sustainable Design"],
-  },
-  {
-    icon: "🌱",
-    title: "Youth Green Leadership Program",
-    desc: "Comprehensive program nurturing young environmental leaders through workshops, mentorship, and practical conservation projects.",
-    tags: ["Leadership", "Conservation"],
-  },
-  {
-    icon: "♻️",
-    title: "Green Space Rehabilitation",
-    desc: "Comprehensive rehabilitation of neglected areas using sustainable practices and waste materials for benches and infrastructure.",
-    tags: ["Restoration", "Upcycling"],
-  },
-];
-
-const benefits = [
-  { icon: "📚", text: "Access to exclusive workshops and training programs" },
-  { icon: "🗳️", text: "Participation in community decision-making processes" },
-  { icon: "🌐", text: "Networking with like-minded individuals and partners" },
-  { icon: "📲", text: "Regular updates on project progress and impact" },
-  { icon: "🤲", text: "Volunteer opportunities in meaningful projects" },
-  { icon: "⚡", text: "Skills development in environmental conservation" },
-];
-
-const areas = [
-  "Tree Planting",
-  "Youth Programs",
-  "Construction Projects",
-  "Workshops & Training",
-  "Community Design",
-  "Fundraising",
-];
-
-export default function MGSNHomepage() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", experience: "" });
-  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
-  const [submitted, setSubmitted] = useState(false);
-
-  const toggleArea = (area: string) => {
-    setSelectedAreas((prev) =>
-      prev.includes(area) ? prev.filter((a) => a !== area) : [...prev, area]
-    );
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+export default function Home() {
+  const [dark, setDark] = useState(false);
+  const T = dark ? DARK : LIGHT;
 
   return (
-    <>
-      <style>{css}</style>
-      <div>
-        {/* NAV */}
-        <nav className="nav">
-          <a href="#" className="nav-logo">
-            <div className="nl-leaf">
-              <img src="/assets/mgsn-logo-dark.png" alt="MGSN" />
-            </div>
+    <div style={{ fontFamily: "'Barlow', sans-serif", background: T.bg, minHeight: "100vh", transition: "background 0.3s, color 0.3s" }}>
+      <header style={{ background: T.headerBg, position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 20px rgba(0,0,0,0.3)", transition: "background 0.3s" }}>
+        {/* MGSN color bar */}
+        <div style={{ height: "4px", background: "linear-gradient(90deg, #F07A1A 0%, #F07A1A 33%, #EDB810 33%, #EDB810 66%, #2D8B3A 66%, #2D8B3A 100%)" }} />
+        {/* Main nav bar */}
+        <div style={{ maxWidth: "960px", margin: "0 auto", padding: "0 20px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px", gap: "16px" }}>
+          {/* Logo + name */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+            <img src="/assets/mgsn-logo-main.png" alt="MGSN" style={{ height: "38px", width: "auto", objectFit: "contain" }} />
             <div>
-              <div className="nl-name">MGSN</div>
-              <div className="nl-reg">Mabopane Green Space Network</div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "11px", fontWeight: 800, letterSpacing: "2px", textTransform: "uppercase", color: "#EDB810", lineHeight: 1.2 }}>MGSN</div>
+              <div style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", letterSpacing: "0.5px", marginTop: "1px" }}>Mabopane Green Space Network</div>
             </div>
-          </a>
-          <div className="nav-links">
-            <a href="#about" className="nl">About</a>
-            <a href="#impact" className="nl">Impact</a>
-            <a href="#projects" className="nl">Projects</a>
-            <a href="#membership" className="nl">Membership</a>
-            <a href="#contact" className="nl-cta">Donate Now</a>
           </div>
-        </nav>
 
-        {/* HERO */}
-        <section className="hero">
-          <div className="hero-eyebrow">🌿 Mabopane Green Space Network · NPC 2025/422818/08</div>
-          <h1 className="hero-title">
-            Cultivating Green Futures,<br />
-            <span>Empowering Communities</span>
+          {/* Weather widget — centered */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "100px", padding: "6px 14px", flexShrink: 0 }}>
+            <span style={{ fontSize: "18px" }}>☀️</span>
+            <div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "14px", fontWeight: 800, color: "#fff", lineHeight: 1 }}>12°C</div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "8px", fontWeight: 600, letterSpacing: "1px", color: "rgba(255,255,255,0.45)", textTransform: "uppercase", marginTop: "1px" }}>Mabopane · Block M</div>
+            </div>
+          </div>
+
+          {/* Nav links */}
+          <nav style={{ display: "flex", gap: "6px", alignItems: "center", flexShrink: 0 }} className="nav-links">
+            {[["/noticeboard","📋 Notice Board"],["/volunteer","🌿 Our Story"],["/register","🤝 Register"]].map(([href, label]) => (
+              <a key={href} href={href} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: T.navTxt, textDecoration: "none", padding: "7px 12px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)", background: T.navBtn, transition: "all 0.18s", whiteSpace: "nowrap" }}>
+                {label}
+              </a>
+            ))}
+            <button onClick={() => setDark(d => !d)} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#EDB810", background: "rgba(237,184,16,0.1)", border: "1px solid rgba(237,184,16,0.3)", borderRadius: "8px", padding: "7px 12px", cursor: "pointer" }}>
+              {dark ? "☀️ Light" : "◐ Dark"}
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      {/* HERO */}
+      <section style={{ position: "relative", overflow: "hidden", minHeight: "420px", display: "flex", alignItems: "center" }}>
+        <img src="/assets/block-m-waterfall-hero.gif" alt="Block M Waterfall Park" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(7,44,44,0.82) 0%, rgba(7,44,44,0.55) 100%)", zIndex: 1 }} />
+        <div style={{ position: "absolute", right: "-40px", top: "-40px", width: "220px", height: "220px", borderRadius: "50%", border: "50px solid rgba(255,255,255,0.04)", zIndex: 1 }} />
+        <div style={{ position: "absolute", left: "-60px", bottom: "-60px", width: "200px", height: "200px", borderRadius: "50%", border: "40px solid rgba(255,255,255,0.03)", zIndex: 1 }} />
+        <div style={{ maxWidth: "960px", width: "100%", margin: "0 auto", padding: "52px 20px 48px", position: "relative", zIndex: 2 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
+            <div style={{ width: "6px", height: "6px", background: "#EDB810", borderRadius: "50%" }} />
+            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "10px", fontWeight: 700, letterSpacing: "4px", textTransform: "uppercase", color: "#EDB810" }}>Block M Waterfall Park · Mabopane</span>
+          </div>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px,5vw,56px)", fontWeight: 900, color: "#fff", lineHeight: 1.04, marginBottom: "10px", letterSpacing: "-0.5px", textShadow: "0 2px 12px rgba(0,0,0,0.3)" }}>
+            The land remembers<br /><span style={{ color: "#EDB810", fontStyle: "italic" }}>who tends it.</span>
           </h1>
-          <p className="hero-lead">
-            Transforming Mabopane's Landscapes, One Green Space at a Time.
-            Join us in building a sustainable and vibrant future for all.
+          <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.8)", lineHeight: 1.6, maxWidth: "520px", marginBottom: "22px", textShadow: "0 1px 6px rgba(0,0,0,0.25)" }}>
+            A community-owned green space network. Restoring native species, clearing invasives, and building something that lasts.
           </p>
-          <div className="hero-ctas">
-            <a href="#impact" className="btn-primary">See Our Impact</a>
-            <a href="#membership" className="btn-secondary">Join Us Today</a>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <a href="/register" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#F07A1A", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", padding: "14px 24px", borderRadius: "100px", textDecoration: "none", boxShadow: "0 4px 18px rgba(240,122,26,0.35)" }}>Join Us &mdash; Re a leboga</a>
+            <a href="/noticeboard" style={{ display: "inline-flex", alignItems: "center", gap: "6px", border: "2px solid rgba(255,255,255,0.3)", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: "12px", letterSpacing: "1.5px", textTransform: "uppercase", padding: "12px 20px", borderRadius: "100px", textDecoration: "none" }}>📋 Notice Board</a>
           </div>
-          <div className="hero-scroll">
-            <div className="scroll-line" />
-            <span>Scroll</span>
-          </div>
-        </section>
-
-        {/* ABOUT */}
-        <section id="about" className="section about">
-          <div className="section-eyebrow">About Mabopane Green Space Network</div>
-          <h2 className="section-title">Pioneering sustainable community development through environmental stewardship</h2>
-          <div className="about-grid">
-            <div className="about-text">
-              <p>
-                <strong>We are a pioneering force</strong> dedicated to revitalizing our urban environment and empowering our community. We believe that thriving green spaces are the bedrock of healthy, prosperous communities.
-              </p>
-              <p>
-                Through innovative projects and collaborative initiatives, MGSN is transforming neglected areas into vibrant hubs of biodiversity, recreation, and social connection.
-              </p>
-              <p>
-                <strong>Our vision:</strong> To create a sustainable and resilient Mabopane where every community member has access to quality green spaces that promote environmental health, social cohesion, and economic prosperity.
-              </p>
-              <p>
-                Our work goes beyond planting trees — we cultivate a deeper connection between people and nature, fostering a sense of ownership and collective responsibility for our shared environment.
-              </p>
-            </div>
-            <div className="about-visual">
-              <div className="av-card">
-                <div className="av-icon">🌍</div>
-                <div className="av-title">Environmental</div>
-                <div className="av-desc">Biodiversity conservation, carbon sequestration, and ecosystem restoration</div>
-              </div>
-              <div className="av-card">
-                <div className="av-icon">👥</div>
-                <div className="av-title">Social</div>
-                <div className="av-desc">Community cohesion, recreational spaces, and improved quality of life</div>
-              </div>
-              <div className="av-card">
-                <div className="av-icon">💰</div>
-                <div className="av-title">Economic</div>
-                <div className="av-desc">Job creation, skills development, and sustainable economic opportunities</div>
-              </div>
-              <div className="av-card">
-                <div className="av-icon">🏛️</div>
-                <div className="av-title">Governance</div>
-                <div className="av-desc">Community-led decisions, transparent operations, and accountable stewardship</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* IMPACT */}
-        <section id="impact" className="section impact">
-          <div style={{ textAlign: "center" }}>
-            <div className="section-eyebrow">Our Collective Impact</div>
-            <h2 className="section-title">At MGSN, our commitment to positive change is reflected in tangible results</h2>
-          </div>
-          <div className="impact-grid">
-            {impacts.map((item) => (
-              <div key={item.label} className="impact-card">
-                <div className="impact-num">{item.num}</div>
-                <div className="impact-label">{item.label}</div>
-              </div>
+          <div style={{ display: "flex", gap: "14px", marginTop: "22px", flexWrap: "wrap" }}>
+            {["Block M · Fortnightly", "60+ Volunteers", "NPC 2025/422818/08"].map(m => (
+              <div key={m} style={{ display: "flex", alignItems: "center", gap: "6px", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "100px", padding: "5px 11px", fontSize: "10px", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, letterSpacing: "1px", color: "rgba(255,255,255,0.8)", textTransform: "uppercase" }}>{m}</div>
             ))}
           </div>
-          <div className="impact-values">
-            <div className="iv-item">
-              <div className="iv-icon">🌍</div>
-              <div className="iv-title">Environmental Value</div>
-              <div className="iv-desc">Biodiversity conservation, carbon sequestration, and ecosystem restoration</div>
-            </div>
-            <div className="iv-item">
-              <div className="iv-icon">👥</div>
-              <div className="iv-title">Social Value</div>
-              <div className="iv-desc">Community cohesion, recreational spaces, and improved quality of life</div>
-            </div>
-            <div className="iv-item">
-              <div className="iv-icon">💰</div>
-              <div className="iv-title">Economic Value</div>
-              <div className="iv-desc">Job creation, skills development, and sustainable economic opportunities</div>
-            </div>
-          </div>
-        </section>
+        </div>
+      </section>
 
-        {/* PROJECTS */}
-        <section id="projects" className="section projects">
-          <div className="projects-header">
-            <div>
-              <div className="section-eyebrow">Our Flagship Projects</div>
-              <h2 className="section-title">Explore our initiatives that exemplify MGSN's dedication to creating lasting change</h2>
+      {/* NEXT SESSIONS */}
+      <section style={{ background: "linear-gradient(135deg, #072C2C 0%, #0D5050 100%)", padding: "32px 20px", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex", alignItems: "center", gap: "28px", flexWrap: "wrap" }}>
+          <div style={{ flexShrink: 0, position: "relative" }}>
+            <img src="/assets/event-poster-9th.png" alt="May Sessions Poster" style={{ width: "140px", height: "180px", objectFit: "cover", borderRadius: "12px", boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }} />
+            <div style={{ position: "absolute", top: "-10px", left: "-10px", background: "#F07A1A", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", padding: "4px 10px", borderRadius: "100px" }}>Next Sessions</div>
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "3px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "6px" }}>📅 Saturday, 23 May 2026</div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(20px,3vw,30px)", fontWeight: 900, color: "#fff", lineHeight: 1.1, marginBottom: "8px" }}>Session 3 &mdash; May Clean-Up<br /><span style={{ color: "#EDB810" }}>Block M Waterfall Park</span></h2>
+            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: "14px" }}>
+              {["🕗 08:00–12:00", "📍 Timber Shelter", "🌿 All ages welcome", "🧤 Gloves provided"].map(d => (
+                <span key={d} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.8)" }}>{d}</span>
+              ))}
+            </div>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", lineHeight: 1.55, marginBottom: "16px" }}>Invasive species removal, indigenous planting, stream bank restoration. Followed by a plant ID workshop with the UP team. Refreshments sponsored.</p>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <a href="/register" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#F07A1A", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: "12px", letterSpacing: "1.5px", textTransform: "uppercase", padding: "10px 20px", borderRadius: "100px", textDecoration: "none" }}>Register Now &rarr;</a>
+              <a href="/noticeboard" style={{ display: "inline-flex", alignItems: "center", gap: "6px", border: "2px solid rgba(255,255,255,0.2)", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", padding: "9px 18px", borderRadius: "100px", textDecoration: "none" }}>View Details</a>
             </div>
           </div>
-          <div className="proj-grid">
-            {projects.map((p) => (
-              <div key={p.title} className="proj-card">
-                <div className="proj-img">{p.icon}</div>
-                <div className="proj-body">
-                  <h3 className="proj-title">{p.title}</h3>
-                  <p className="proj-desc">{p.desc}</p>
-                  <div className="proj-tags">
-                    {p.tags.map((t) => (
-                      <span key={t} className="proj-tag">{t}</span>
-                    ))}
-                  </div>
+        </div>
+        <div style={{ position: "absolute", right: "-50px", bottom: "-50px", width: "180px", height: "180px", borderRadius: "50%", border: "45px solid rgba(255,255,255,0.03)" }} />
+      </section>
+
+      {/* WORKSHOP BANNER */}
+      <section style={{ background: "linear-gradient(135deg, #1a3a1a 0%, #2d5a1e 100%)", padding: "28px 20px", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex", alignItems: "center", gap: "28px", flexWrap: "wrap" }}>
+          <div style={{ flexShrink: 0, textAlign: "center" }}>
+            <div style={{ width: "72px", height: "72px", background: "rgba(237,184,16,0.15)", border: "2px solid rgba(237,184,16,0.4)", borderRadius: "16px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "28px", fontWeight: 900, color: "#EDB810" }}>26</span>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "1.5px", color: "rgba(237,184,16,0.7)", textTransform: "uppercase" }}>May</span>
+            </div>
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "inline-block", background: "rgba(237,184,16,0.15)", border: "1px solid rgba(237,184,16,0.3)", borderRadius: "100px", padding: "3px 10px", fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "#EDB810", marginBottom: "8px" }}>🎓 Workshop</div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "3px", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: "6px" }}>📅 Tuesday, 26 May 2026 &nbsp;&middot;&nbsp; 🕘 09:00–12:00</div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(18px,3vw,26px)", fontWeight: 900, color: "#fff", lineHeight: 1.15, marginBottom: "8px" }}>Invasive Alien Plant Species<br /><span style={{ color: "#EDB810" }}>Identification & Removal Workshop</span></h2>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.65)", lineHeight: 1.6, marginBottom: "14px" }}>A structured 3-hour workshop at the Block M Waterfall Park timber shelter. Learn to identify and safely remove invasive species. Hosted by MGSN with partner support. Free entry &mdash; all welcome.</p>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <a href="/register" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#EDB810", color: "#1a3a1a", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: "12px", letterSpacing: "1.5px", textTransform: "uppercase", padding: "10px 20px", borderRadius: "100px", textDecoration: "none" }}>Register for Workshop &rarr;</a>
+              <a href="/noticeboard" style={{ display: "inline-flex", alignItems: "center", gap: "6px", border: "2px solid rgba(255,255,255,0.2)", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", padding: "9px 18px", borderRadius: "100px", textDecoration: "none" }}>Learn More</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section style={{ background: T.surface, borderBottom: "1px solid " + T.border, padding: "20px", transition: "all 0.3s" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0", textAlign: "center" }}>
+          {[["60+", "Community Members", "Blocks A through L"], ["3", "Partner Institutions", "UP · CoT · MGSN"], ["9", "Species Identified", "Invasive + Indigenous"], ["2 km", "Stream Surveyed", "Block M Watercourse"]].map(item => (
+            <div key={item[1]} style={{ padding: "8px 16px", borderRight: "1px solid " + T.border }}>
+              <p style={{ fontSize: "28px", fontWeight: 900, color: dark ? "#EDB810" : "#0D5050" }}>{item[0]}</p>
+              <p style={{ fontSize: "12px", fontWeight: 600, color: dark ? "#fff" : "#1A3D4A", marginTop: "2px" }}>{item[1]}</p>
+              <p style={{ fontSize: "10px", color: T.muted, marginTop: "2px" }}>{item[2]}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* LATEST NOTICES */}
+      <section style={{ maxWidth: "960px", margin: "0 auto", padding: "40px 20px 60px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "20px" }}>📋</span>
+            <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "11px", fontWeight: 800, letterSpacing: "2.5px", textTransform: "uppercase", color: T.dim }}>Latest Notices</h2>
+          </div>
+          <a href="/noticeboard" style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: dark ? "#EDB810" : "#0D5050", textDecoration: "none" }}>Full Notice Board &rarr;</a>
+        </div>
+        <div style={{ display: "grid", gap: "12px" }}>
+          {[
+            { cat: "urgent", bar: "linear-gradient(90deg, #C0392B, #8B1C14)", badge: "Urgent", badgeBg: "#FDECEA", badgeColor: "#C0392B", title: "Freedom Day Launch &mdash; Monday 27 April 2026", body: "First clean-up session at Block M Waterfall. Weather confirmed clear &mdash; 24&deg;C. Meet at the timber shelter at 08:00.", date: "26 April 2026", author: "MGSN Management", href: "/noticeboard" },
+            { cat: "news", bar: "linear-gradient(90deg, #1B7A7A, #0D5050)", badge: "News", badgeBg: dark ? "#0a3535" : "#E6F4F4", badgeColor: dark ? "#EDB810" : "#0D5050", title: "Solar Floodlights Installed at Block M Waterfall Park", body: "Two 12-metre timber poles with solar-powered floodlights installed. Park now lit after dark.", date: "25 April 2026", author: "Bra Tshego &mdash; MGSN", href: "/noticeboard" },
+            { cat: "notice", bar: "linear-gradient(90deg, #2D8B3A, #1E6028)", badge: "Notice", badgeBg: dark ? "#0a3535" : "#E8F5EA", badgeColor: dark ? "#EDB810" : "#1E6028", title: "Volunteer Registration Now Open &mdash; Earn Rewards", body: "Register to join the Clean-Up Team-Up group. Volunteers earn vouchers from Shoprite, Cashbuild and local food vendors.", date: "24 April 2026", author: "MGSN Management", href: "/register" },
+          ].map(post => (
+            <div key={post.title} style={{ background: T.surface, borderRadius: "14px", overflow: "hidden", boxShadow: T.cardShadow, border: "1px solid " + T.border, transition: "all 0.3s" }}>
+              <div style={{ height: "3.5px", background: post.bar }} />
+              <div style={{ padding: "16px 18px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+                  <span style={{ padding: "3px 8px", borderRadius: "100px", fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", background: post.badgeBg, color: post.badgeColor }}>{post.badge}</span>
+                  <span style={{ fontSize: "10px", color: T.dim, marginLeft: "auto" }}>{post.date}</span>
+                </div>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "17px", fontWeight: 700, color: dark ? "#fff" : "#1A3D4A", lineHeight: 1.25, marginBottom: "6px" }}>{post.title}</h3>
+                <p style={{ fontSize: "13px", color: T.muted, lineHeight: 1.6, marginBottom: "12px" }}>{post.body}</p>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "10px", borderTop: "1px solid " + T.border }}>
+                  <span style={{ fontSize: "11px", fontWeight: 600, color: T.muted }}>{post.author}</span>
+                  <a href={post.href} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: dark ? "#EDB810" : "#0D5050", textDecoration: "none" }}>Read more &rarr;</a>
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* MEMBERSHIP */}
-        <section id="membership" className="section membership">
-          <div className="section-eyebrow">Join Our Community</div>
-          <h2 className="section-title">Become part of the movement transforming Mabopane's green spaces</h2>
-          <div className="mems-grid">
-            <div>
-              <h3 style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 14, fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", color: "#D4A535", marginBottom: 20 }}>Membership Benefits</h3>
-              <ul className="mems-benefits">
-                {benefits.map((b) => (
-                  <li key={b.text} className="mb-item">
-                    <div className="mb-icon">{b.icon}</div>
-                    <span>{b.text}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* WhatsApp QR Section */}
-              <div className="wa-qr-section">
-                <div className="wa-qr-title">💬</div>
-                <div className="wa-qr-label">Join Our Volunteer WhatsApp Group</div>
-                <div className="wa-qr-location">Mabopane Block M · Waterfall Park</div>
-                <img src="/assets/whatsapp-qr.png" alt="WhatsApp QR Code" className="wa-qr-img" />
-                <div className="wa-qr-caption">Scan to join the volunteer group</div>
-              </div>
             </div>
-            <div className="mems-form">
-              {submitted ? (
-                <div style={{ textAlign: "center", padding: "40px 20px" }}>
-                  <div style={{ fontSize: 40, marginBottom: 16 }}>✅</div>
-                  <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 22, fontWeight: 700, color: "#fff", marginBottom: 8 }}>Welcome to MGSN!</h3>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,.6)" }}>We'll be in touch soon. Kea leboga! 🙏🏾</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit}>
-                  <h3 className="mems-form-title">Sign Up Today</h3>
-                  <div className="form-group">
-                    <label className="form-label">Full Name *</label>
-                    <input
-                      type="text"
-                      className="form-input"
-                      placeholder="Your full name"
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Email Address *</label>
-                    <input
-                      type="email"
-                      className="form-input"
-                      placeholder="your@email.com"
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Phone Number</label>
-                    <input
-                      type="tel"
-                      className="form-input"
-                      placeholder="+27 XX XXX XXXX"
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Areas of Interest</label>
-                    <div className="form-checkboxes">
-                      {areas.map((area) => (
-                        <label key={area} className="form-checkbox">
-                          <input
-                            type="checkbox"
-                            checked={selectedAreas.includes(area)}
-                            onChange={() => toggleArea(area)}
-                          />
-                          <span>{area}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Previous Experience</label>
-                    <textarea
-                      className="form-input"
-                      rows={3}
-                      placeholder="Tell us about your relevant experience..."
-                      value={form.experience}
-                      onChange={(e) => setForm({ ...form, experience: e.target.value })}
-                      style={{ resize: "vertical" }}
-                    />
-                  </div>
-                  <button type="submit" className="form-submit">Join MGSN</button>
-                </form>
-              )}
-            </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </section>
 
-        {/* FOOTER */}
-        <footer id="contact" className="footer">
-          <div className="footer-inner">
-            <div>
-              <div className="footer-brand">
-                <div className="footer-logo">
-                  <img src="/assets/mgsn-logo-light.png" alt="MGSN" />
-                </div>
+      {/* WHAT WOULD YOU LIKE TO DO */}
+      <section style={{ background: T.surface, borderTop: "1px solid " + T.border, borderBottom: "1px solid " + T.border, padding: "40px 20px", transition: "all 0.3s" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+          <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "11px", fontWeight: 800, letterSpacing: "2.5px", textTransform: "uppercase", color: T.dim, marginBottom: "16px" }}>What would you like to do?</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
+            {[
+              { icon: "📋", title: "Notice Board", sub: "News, events, announcements. Stay informed.", href: "/noticeboard", color: "#1B7A7A" },
+              { icon: "🤝", title: "Register to Volunteer", sub: "Join the green team. Earn rewards for your time.", href: "/register", color: "#F07A1A" },
+              { icon: "🌿", title: "Our Story", sub: "What happened on 30 April 2026 at Block M.", href: "/volunteer", color: "#2D8B3A" },
+              { icon: "💬", title: "Chat with MGSN", sub: "Questions? Email the team directly.", href: "mailto:tshegofatso@duck.com", color: "#1565C0" },
+            ].map(item => (
+              <a key={item.title} href={item.href} style={{ background: T.surface2, borderRadius: "14px", padding: "20px 18px", textDecoration: "none", border: "1px solid " + T.border, display: "flex", flexDirection: "column", gap: "8px", boxShadow: T.cardShadow, transition: "all 0.3s" }}>
+                <span style={{ fontSize: "28px" }}>{item.icon}</span>
                 <div>
-                  <div className="nl-name">MGSN</div>
-                  <div className="nl-reg">Mabopane Green Space Network</div>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "14px", fontWeight: 800, letterSpacing: "0.5px", color: item.color }}>{item.title}</div>
+                  <div style={{ fontSize: "12px", color: T.muted, lineHeight: 1.4, marginTop: "4px" }}>{item.sub}</div>
                 </div>
-              </div>
-              <p className="footer-tagline">
-                Cultivating green futures and empowering communities through sustainable environmental initiatives.
-              </p>
-            </div>
-            <div>
-              <div className="footer-col-title">Quick Links</div>
-              <ul className="footer-links">
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#projects">Our Projects</a></li>
-                <li><a href="#impact">Our Impact</a></li>
-                <li><a href="#membership">Join Us</a></li>
-              </ul>
-            </div>
-            <div>
-              <div className="footer-col-title">Get Involved</div>
-              <ul className="footer-links">
-                <li><a href="#membership">Become a Member</a></li>
-                <li><a href="#contact">Volunteer</a></li>
-                <li><a href="#contact">Donate</a></li>
-                <li><a href="#contact">Partner With Us</a></li>
-              </ul>
-            </div>
-            <div>
-              <div className="footer-col-title">Contact Info</div>
-              <ul className="footer-links">
-                <li><a href="#">Mabopane, City of Tshwane</a></li>
-                <li><a href="mailto:info@mgsn.org.za">info@mgsn.org.za</a></li>
-              </ul>
-            </div>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: item.color, marginTop: "auto" }}>Open &rarr;</div>
+              </a>
+            ))}
           </div>
-          <div className="footer-bottom">
-            <span className="footer-copy">© 2025 Mabopane Green Space Network. All rights reserved. · NPC Reg. 2025/422818/08</span>
-            <span className="footer-copy">Mabopane, City of Tshwane, South Africa</span>
+        </div>
+      </section>
+
+      {/* WHATSAPP QR */}
+      <section style={{ background: "linear-gradient(135deg, #072C2C, #0D5050)", padding: "40px 20px", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex", alignItems: "center", gap: "28px", flexWrap: "wrap" }}>
+          <div style={{ flexShrink: 0, textAlign: "center" }}>
+            <img src="/assets/whatsapp-qr-main.png" alt="MGSN WhatsApp QR" style={{ width: "110px", height: "110px", borderRadius: "12px", border: "3px solid rgba(255,255,255,0.2)", display: "block" }} />
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginTop: "6px" }}>Scan to join</div>
           </div>
-        </footer>
-      </div>
-    </>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "3px", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: "6px" }}>💬 Join the conversation</div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(20px,3vw,28px)", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: "8px" }}>MGSN Clean-Up Team-Up<br /><span style={{ color: "#EDB810" }}>WhatsApp Group</span></h2>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.65)", lineHeight: 1.6, marginBottom: "14px" }}>Get session updates, volunteer reminders, and community news delivered straight to your phone.</p>
+            <a href="/register" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#25D366", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", padding: "10px 18px", borderRadius: "100px", textDecoration: "none" }}>📱 Register to Join</a>
+          </div>
+        </div>
+        <div style={{ position: "absolute", right: "-50px", bottom: "-50px", width: "180px", height: "180px", borderRadius: "50%", border: "45px solid rgba(255,255,255,0.03)", pointerEvents: "none" }} />
+      </section>
+
+      <footer style={{ background: T.headerBg, padding: "32px 20px", textAlign: "center", transition: "background 0.3s" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+          <img src="/assets/mgsn-logo-main.png" alt="MGSN" style={{ height: "40px", width: "auto", margin: "0 auto 14px", display: "block", objectFit: "contain" }} />
+          <div style={{ display: "flex", justifyContent: "center", gap: "24px", margin: "12px 0 16px", flexWrap: "wrap" }}>
+            {[["/", "Home"], ["/noticeboard", "Notice Board"], ["/volunteer", "Our Story"], ["/register", "Register"], ["mailto:tshegofatso@duck.com", "Contact"]].map(([href, label]) => (
+              <a key={label} href={href} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "11px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{label}</a>
+            ))}
+          </div>
+          <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", lineHeight: 1.7 }}>Mabopane Green Space Network &middot; NPC Reg. 2025/422818/08<br />Block M Waterfall Park &middot; Mabopane, City of Tshwane<br /><span style={{ fontStyle: "italic" }}>Kgosi ya lefatshe ke morafe &mdash; A community owns its land.</span></div>
+          <div style={{ height: "3px", background: "linear-gradient(90deg, #F07A1A, #EDB810, #2D8B3A)", width: "60px", margin: "20px auto 0", borderRadius: "100px" }} />
+        </div>
+      </footer>
+
+      <style>{`
+        @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,0.5); } 50% { box-shadow: 0 0 0 6px rgba(76,175,80,0); } }
+        @media (max-width: 640px) {
+          .nav-links { display: none !important; }
+        }
+      `}</style>
+    </div>
   );
 }
