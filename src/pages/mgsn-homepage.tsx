@@ -28,7 +28,7 @@ export default function Home() {
         <div style={{ maxWidth: "960px", margin: "0 auto", padding: "0 20px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px", gap: "16px" }}>
           {/* Logo + name */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-            <img src="/assets/mgsn-logo-main.png" alt="MGSN" style={{ height: "38px", width: "auto", objectFit: "contain" }} />
+            <img src="/assets/mgsn-logo-light.png" alt="MGSN" style={{ height: "38px", width: "auto", objectFit: "contain" }} />
             <div>
               <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "11px", fontWeight: 800, letterSpacing: "2px", textTransform: "uppercase", color: "#EDB810", lineHeight: 1.2 }}>MGSN</div>
               <div style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", letterSpacing: "0.5px", marginTop: "1px" }}>Mabopane Green Space Network</div>
@@ -60,7 +60,7 @@ export default function Home() {
 
       {/* HERO */}
       <section style={{ position: "relative", overflow: "hidden", minHeight: "420px", display: "flex", alignItems: "center" }}>
-        <img src="/assets/block-m-waterfall-hero.gif" alt="Block M Waterfall Park" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+        <img src="/assets/block-m-waterfall-hero.jpg" alt="Block M Waterfall Park" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(7,44,44,0.82) 0%, rgba(7,44,44,0.55) 100%)", zIndex: 1 }} />
         <div style={{ position: "absolute", right: "-40px", top: "-40px", width: "220px", height: "220px", borderRadius: "50%", border: "50px solid rgba(255,255,255,0.04)", zIndex: 1 }} />
         <div style={{ position: "absolute", left: "-60px", bottom: "-60px", width: "200px", height: "200px", borderRadius: "50%", border: "40px solid rgba(255,255,255,0.03)", zIndex: 1 }} />
@@ -91,7 +91,7 @@ export default function Home() {
       <section style={{ background: "linear-gradient(135deg, #072C2C 0%, #0D5050 100%)", padding: "32px 20px", position: "relative", overflow: "hidden" }}>
         <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex", alignItems: "center", gap: "28px", flexWrap: "wrap" }}>
           <div style={{ flexShrink: 0, position: "relative" }}>
-            <img src="/assets/event-poster-9th.png" alt="May Sessions Poster" style={{ width: "140px", height: "180px", objectFit: "cover", borderRadius: "12px", boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }} />
+            <img src="/assets/event-poster-9th.jpg" alt="May Sessions Poster" style={{ width: "140px", height: "180px", objectFit: "cover", borderRadius: "12px", boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }} />
             <div style={{ position: "absolute", top: "-10px", left: "-10px", background: "#F07A1A", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", padding: "4px 10px", borderRadius: "100px" }}>Next Sessions</div>
           </div>
           <div style={{ flex: 1 }}>
@@ -209,7 +209,7 @@ export default function Home() {
       <section style={{ background: "linear-gradient(135deg, #072C2C, #0D5050)", padding: "40px 20px", position: "relative", overflow: "hidden" }}>
         <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex", alignItems: "center", gap: "28px", flexWrap: "wrap" }}>
           <div style={{ flexShrink: 0, textAlign: "center" }}>
-            <img src="/assets/whatsapp-qr-main.png" alt="MGSN WhatsApp QR" style={{ width: "110px", height: "110px", borderRadius: "12px", border: "3px solid rgba(255,255,255,0.2)", display: "block" }} />
+            <img src="/assets/whatsapp-qr.png" alt="MGSN WhatsApp QR" style={{ width: "110px", height: "110px", borderRadius: "12px", border: "3px solid rgba(255,255,255,0.2)", display: "block" }} />
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginTop: "6px" }}>Scan to join</div>
           </div>
           <div style={{ flex: 1 }}>
@@ -224,7 +224,7 @@ export default function Home() {
 
       <footer style={{ background: T.headerBg, padding: "32px 20px", textAlign: "center", transition: "background 0.3s" }}>
         <div style={{ maxWidth: "960px", margin: "0 auto" }}>
-          <img src="/assets/mgsn-logo-main.png" alt="MGSN" style={{ height: "40px", width: "auto", margin: "0 auto 14px", display: "block", objectFit: "contain" }} />
+          <img src="/assets/mgsn-logo-light.png" alt="MGSN" style={{ height: "40px", width: "auto", margin: "0 auto 14px", display: "block", objectFit: "contain" }} />
           <div style={{ display: "flex", justifyContent: "center", gap: "24px", margin: "12px 0 16px", flexWrap: "wrap" }}>
             {[["/", "Home"], ["/noticeboard", "Notice Board"], ["/volunteer", "Our Story"], ["/register", "Register"], ["mailto:tshegofatso@duck.com", "Contact"]].map(([href, label]) => (
               <a key={label} href={href} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "11px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{label}</a>
