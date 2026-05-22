@@ -2,23 +2,11 @@ import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    viteStaticCopy({
-      targets: [
-        { src: "src/assets/*", dest: "assets/" },
-        { src: "src/images/*", dest: "images/" },
-      ],
-    }),
-  ],
+  plugins: [react(), tailwindcss()],
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+    alias: { "@": path.resolve(__dirname, "./src") },
   },
   base: "./",
   build: {
